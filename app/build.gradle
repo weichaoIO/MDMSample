@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "28.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.huawei.mdm.sample2"
-        minSdkVersion 8
-        targetSdkVersion 18
+        minSdkVersion 14
+        targetSdkVersion 27
     }
 
     buildTypes {
@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.1.0'
-    compile files('libs/HwMdm2.0.jar')
+    implementation files('libs/HwMdm2.0.jar')
+
+    implementation 'com.android.support:support-v4:27.0.0'
 }

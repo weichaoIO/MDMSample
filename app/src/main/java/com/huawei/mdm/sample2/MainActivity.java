@@ -1,9 +1,7 @@
 package com.huawei.mdm.sample2;
 
-
 import com.huawei.android.app.AppOpsManagerEx;
 import com.huawei.android.app.admin.DeviceRestrictionManager;
-import com.huawei.mdm.sample2.R;
 
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -32,19 +30,17 @@ public class MainActivity extends Activity {
     private Button captureDisableBtn;
     private Button captureEnableBtn;
 
-	@SuppressWarnings("static-access")
-	@Override
+    @SuppressWarnings("static-access")
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AppOpsManagerEx appManager = new AppOpsManagerEx();
-			try {
-				appManager.setMode(AppOpsManagerEx.TYPE_OPEN_BLUETOOTH, "com.huawei.mdm.sample2", AppOpsManagerEx.MODE_ALLOWED);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
+//        AppOpsManagerEx appManager = new AppOpsManagerEx();
+//        try {
+//            appManager.setMode(AppOpsManagerEx.TYPE_OPEN_BLUETOOTH, "com.huawei.mdm.sample2", AppOpsManagerEx.MODE_ALLOWED);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
 
         mDevicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         mDeviceRestrictionManager = new DeviceRestrictionManager();
@@ -56,15 +52,15 @@ public class MainActivity extends Activity {
     }
 
     private void initSampleView() {
-        mStatusText = (TextView) findViewById(R.id.wifiStateTxt);
-        wifiDisableBtn = (Button) findViewById(R.id.disableWifi);
-        wifiEnableBtn = (Button) findViewById(R.id.enableWifi);
-        mStatusText2 = (TextView) findViewById(R.id.googleAccountStateTxt);
-        googleDisableBtn = (Button) findViewById(R.id.disableGoogleAccount);
-        googleEnableBtn = (Button) findViewById(R.id.enableGoogleAccount);
-        mStatusText3 = (TextView) findViewById(R.id.screenCaptureStateTxt);
-        captureDisableBtn = (Button) findViewById(R.id.disableScreenCapture);
-        captureEnableBtn = (Button) findViewById(R.id.enableScreenCapture);
+        mStatusText = findViewById(R.id.wifiStateTxt);
+        wifiDisableBtn = findViewById(R.id.disableWifi);
+        wifiEnableBtn = findViewById(R.id.enableWifi);
+        mStatusText2 = findViewById(R.id.googleAccountStateTxt);
+        googleDisableBtn = findViewById(R.id.disableGoogleAccount);
+        googleEnableBtn = findViewById(R.id.enableGoogleAccount);
+        mStatusText3 = findViewById(R.id.screenCaptureStateTxt);
+        captureDisableBtn = findViewById(R.id.disableScreenCapture);
+        captureEnableBtn = findViewById(R.id.enableScreenCapture);
 
         wifiDisableBtn.setOnClickListener(new SampleOnClickListener());
         wifiEnableBtn.setOnClickListener(new SampleOnClickListener());
@@ -73,10 +69,9 @@ public class MainActivity extends Activity {
         captureDisableBtn.setOnClickListener(new SampleOnClickListener());
         captureEnableBtn.setOnClickListener(new SampleOnClickListener());
     }
-    
 
     private void updateState() {
-        if(!isActiveMe()) {
+        if (!isActiveMe()) {
             mStatusText.setText(getString(R.string.state_not_actived));
             mStatusText2.setText(getString(R.string.state_not_actived));
             mStatusText3.setText(getString(R.string.state_not_actived));
@@ -100,14 +95,14 @@ public class MainActivity extends Activity {
             mStatusText.setText(getString(R.string.state_nomal));
         }
         if (isGoogleAccountDisabled) {
-        	mStatusText2.setText(R.string.state_restricted);
+            mStatusText2.setText(R.string.state_restricted);
         } else {
-        	mStatusText2.setText(getString(R.string.state_nomal));
+            mStatusText2.setText(getString(R.string.state_nomal));
         }
         if (isScreenCaptureDisabled) {
-        	mStatusText3.setText(R.string.state_restricted);
+            mStatusText3.setText(R.string.state_restricted);
         } else {
-        	mStatusText3.setText(getString(R.string.state_nomal));
+            mStatusText3.setText(getString(R.string.state_nomal));
         }
     }
 
@@ -116,39 +111,32 @@ public class MainActivity extends Activity {
         updateState();
         super.onActivityResult(requestCode, resultCode, data);
     }
-    
+
     private boolean isActiveMe() {
-        if(mDevicePolicyManager == null || !mDevicePolicyManager.isAdminActive(mAdminName)) {
-            return false;
-        } else {
-            return true;
-        }
+        return mDevicePolicyManager != null && mDevicePolicyManager.isAdminActive(mAdminName);
     }
 
     private class SampleOnClickListener implements OnClickListener {
-
         @Override
         public void onClick(View v) {
             boolean disableWfi = false;
             boolean disableGoogleAccount = false;
             boolean disableScreenCapture = false;
-            
+
             if (v.getId() == R.id.disableWifi) {
-            	disableWfi = true;
+                disableWfi = true;
             } else if (v.getId() == R.id.enableWifi) {
-            	disableWfi = false;
-            }else if(v.getId() == R.id.disableGoogleAccount){
-            	disableGoogleAccount = true;
-            }else if(v.getId() == R.id.enableGoogleAccount){
-            	disableGoogleAccount = false;
+                disableWfi = false;
+            } else if (v.getId() == R.id.disableGoogleAccount) {
+                disableGoogleAccount = true;
+            } else if (v.getId() == R.id.enableGoogleAccount) {
+                disableGoogleAccount = false;
+            } else if (v.getId() == R.id.disableScreenCapture) {
+                disableScreenCapture = true;
+            } else if (v.getId() == R.id.enableScreenCapture) {
+                disableScreenCapture = false;
             }
-            else if(v.getId() == R.id.disableScreenCapture){
-            	disableScreenCapture = true;
-            }
-            else if(v.getId() == R.id.enableScreenCapture){
-            	disableScreenCapture = false;
-            }
-            
+
             try {
                 if (mDeviceRestrictionManager != null) {
                     mDeviceRestrictionManager.setWifiDisabled(mAdminName, disableWfi);
